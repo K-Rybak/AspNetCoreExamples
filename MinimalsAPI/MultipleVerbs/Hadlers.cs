@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MultipleVerbs
+﻿namespace MultipleVerbs
 {
     public class Handlers
     {
