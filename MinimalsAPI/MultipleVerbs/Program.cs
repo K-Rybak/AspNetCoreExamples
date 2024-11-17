@@ -2,16 +2,25 @@ using MultipleVerbs;
 using System.Net.Mime;
 
 var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+var app = builder.Build();
 //Returns all elements witg lambda
 app.MapGet("/fruit", () => Fruit.All);
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 var getFruit = (string id) => Fruit.All[id];
-app.MapGet("/fruit/{id}", getFruit);
+app.MapGet("/fruit/{id:int:min(1)}", getFruit);
 
-app.MapPost("/fruit/{id}", Handlers.AddFruit); // static method
+app.MapPost("/fruit/{id}", Handlers.AddFruit)
+    .WithParameterValidation(); // static method
 
 var handler = new Handlers();
 app.MapPut("/fruit/{id}", handler.ReplaceFruit);
